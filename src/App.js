@@ -66,6 +66,7 @@ const initialFacts = [
 function App() {
   // 1. define state
   const [showForm, setShowForm] = useState(false);
+  const [facts, setFacts] = useState(initialFacts);
 
   return (
     <>
@@ -73,11 +74,11 @@ function App() {
       <Header showForm={showForm} setShowForm={setShowForm} />
 
       {/* 2. use state variable */}
-      {showForm ? <NewFactForm /> : null}
+      {showForm ? <NewFactForm setFacts={setFacts} setShowForm={setShowForm} /> : null}
 
       <main className='main'>
         <CategoryFilter />
-        <FactList />
+        <FactList facts={facts} />
       </main>
     </>
   );
@@ -103,14 +104,51 @@ function Header({ showForm, setShowForm }) {
   );
 }
 
-function NewFactForm() {
+function isValidHttpUrl(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function NewFactForm({ setFacts, setShowForm }) {
   const [text, setText] = useState('');
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState('http://example.com');
   const [category, setCategory] = useState('');
+  const textLength = text.length;
 
   function handleSubmit(event) {
+    // 1. Prevent browser reload
     event.preventDefault();
     console.log(text, source, category)
+
+    // 2. check if data is valid
+    if (text && isValidHttpUrl(source) && category && textLength <= 200) {
+      // 3. create new fact object
+      const newFact = {
+        id: Math.round(Math.random() * 1000000),
+        text,
+        source,
+        category,
+        votesInteresting: 0,
+        votesMindblowing: 0,
+        votesFalse: 0,
+        createdIn: new Date().getFullYear(),
+      };
+
+      // 4. add the new fact to the UI
+      setFacts(facts => [newFact, ...facts]);
+
+      // 5. reset input fields
+      setText('');
+      setSource('');
+      setCategory('');
+
+      // 6. close the form
+      setShowForm(false);
+    }
   }
 
   return (
@@ -121,7 +159,7 @@ function NewFactForm() {
         value={text}
         onChange={event => setText(event.target.value)}
       />
-      <span>{200 - text.length}</span>
+      <span>{200 - textLength}</span>
       <input
         type="text"
         placeholder="Trustworthy source..."
@@ -165,10 +203,7 @@ function CategoryFilter() {
   );
 }
 
-function FactList() {
-  // TEMP
-  const facts = initialFacts;
-
+function FactList({ facts }) {
   return (
     <section>
       <ul className='facts-list'>
