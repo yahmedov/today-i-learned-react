@@ -35,14 +35,22 @@ function App() {
   // 1. define state
   const [showForm, setShowForm] = useState(false);
   const [facts, setFacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(function () {
     async function getFacts() {
+      setIsLoading(true);
       const { data: facts, error } = await supabase
         .from('facts')
         .select('*')
 
-      setFacts(facts);
+      if (!error) {
+        setFacts(facts);
+      } else {
+        alert('There was an error fetching data!');
+      }
+
+      setIsLoading(false);
     }
 
     getFacts();
@@ -58,9 +66,15 @@ function App() {
 
       <main className='main'>
         <CategoryFilter />
-        <FactList facts={facts} />
+        {isLoading ? <Loader /> : <FactList facts={facts} />}
       </main>
     </>
+  );
+}
+
+function Loader() {
+  return (
+    <p className='message'>Loading ...</p>
   );
 }
 

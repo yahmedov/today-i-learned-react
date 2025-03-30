@@ -16,6 +16,14 @@ body {
   display: none !important;
 }
 
+.message {
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 32px;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
 #root {
   max-width: 1500px;
   margin: 0 auto;
