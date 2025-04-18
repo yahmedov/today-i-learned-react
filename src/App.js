@@ -97,6 +97,26 @@ function isValidHttpUrl(string) {
   }
 }
 
+/**
+ * Checks if url starts with either http or https
+ * if not prepends https:// before the url
+ * @param {string} url 
+ * @param {string} protocol https
+ * @returns {string} url ready to use as href
+ * @example
+ * ensureLinkProtocol('http://www.example.com')
+ * 'http://www.example.com' // same as input
+ * ensureLinkProtocol('www.example.com')
+ * 'https://www.example.com' // prepended url
+ */
+function ensureLinkProtocol(url, protocol = 'https') {
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  } else {
+    return `${protocol}://${url}`;
+  }
+}
+
 function NewFactForm({ setFacts, setShowForm }) {
   const [text, setText] = useState('');
   const [source, setSource] = useState('');
@@ -134,6 +154,8 @@ function NewFactForm({ setFacts, setShowForm }) {
 
       // 6. close the form
       setShowForm(false);
+    } else if (!isValidHttpUrl(source)) {
+      alert('enter valid url in format "https://example.com"');
     }
   }
 
@@ -152,6 +174,8 @@ function NewFactForm({ setFacts, setShowForm }) {
         placeholder="Trustworthy source..."
         value={source}
         onChange={event => setSource(event.target.value)}
+        // EXAMPLE usage - automatically add https if no protocol was specified
+        onBlur={() => setSource(ensureLinkProtocol(source))} // on focus change, https the source
         disabled={isUploading}
       />
       <select
