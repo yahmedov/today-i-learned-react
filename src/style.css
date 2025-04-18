@@ -80,6 +80,11 @@ section {
   padding-bottom: 40px;
 }
 
+section::-webkit-scrollbar {
+  display: none;
+  /* disable scroll bars for Chrome, Safari, Edge and Opera */
+}
+
 h1 {
   font-size: 42px;
   text-transform: uppercase;
