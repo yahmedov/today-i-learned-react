@@ -1,0 +1,35 @@
+name: Build and Deploy to Netlify
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Zip the build folder
+        run: npm run zip:build
+
+      - name: Deploy to Netlify
+        run: |
+          curl -X POST https://api.netlify.com/api/v1/sites/${{ secrets.NETLIFY_SITE_ID }}/deploys \
+            -H "Authorization: Bearer ${{ secrets.NETLIFY_AUTH_TOKEN }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@deploy.zip"
