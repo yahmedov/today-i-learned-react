@@ -1,8 +1,10 @@
 # Today I Learned (React)
 React.js, CSS and Supabase project.
 
-## Scripts
+## Demo Site
+[Demo Site Link](https://genuine-entremet-077a95.netlify.app)
 
+## Scripts
 * To start a local development server:
 ```
 npm run dev
@@ -22,4 +24,7 @@ npm run build
 npm run zip:build
 ```
 
-#### This project was bootstrapped with "Create React App"
+
+---
+
+This project was bootstrapped with "Create React App"
