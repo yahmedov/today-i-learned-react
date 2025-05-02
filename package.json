@@ -18,7 +18,7 @@
     "dev": "npm run start",
     "build": "react-scripts build",
     "zip:build": "cd build && zip -r ../deploy.zip * && cd ../",
-    "test": "react-scripts test",
+    "test": "npx playwright test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -38,5 +38,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.3"
   }
 }
